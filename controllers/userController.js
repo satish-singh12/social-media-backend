@@ -26,6 +26,22 @@ const userController = {
       return res.status(500).json({ message: err.message });
     }
   },
+
+  updateUser: async (req, res) => {
+    try {
+      const { website, fullname, story, phone, address } = req.body;
+      if (!fullname) {
+        return res.status(400).json({ message: "Fullname is requires" });
+      }
+      await Users.findOneAndUpdate(
+        { _id: req.user._id },
+        { website, fullname, story, phone, address }
+      );
+      return res.status(201).json({ message: "Updated successfully!" });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  },
 };
 
 module.exports = userController;

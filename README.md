@@ -67,7 +67,6 @@ Models
 
 Code Structure
 
-```
 ├── controllers
 │   ├── authController.js        # Handles user authentication
 │   ├── userController.js        # Handles user-related logic
