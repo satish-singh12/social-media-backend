@@ -42,6 +42,61 @@ const userController = {
       return res.status(500).json({ message: err.message });
     }
   },
+
+  friend: async (req, res) => {
+    try {
+      const user = await Users.find({
+        _id: req.params.id,
+        friends: req.user._id,
+      });
+      if (user.length > 0)
+        return res.status(400).json({ message: "You have already following" });
+
+      await Users.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $push: { friends: req.user._id },
+        },
+        { new: true }
+      );
+
+      await Users.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          $push: { following: req.params.id },
+        },
+        { new: true }
+      );
+
+      res.json({ message: "friend added.." });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  },
+
+  unfriend: async (req, res) => {
+    try {
+      await Users.findOneAndUpdate(
+        { _id: req.params._id },
+        {
+          $pull: { friends: req.user._id },
+        },
+        { new: true }
+      );
+
+      await Users.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          $pull: { following: req.params._id },
+        },
+        { new: true }
+      );
+
+      res.json({ message: "friend removed" });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  },
 };
 
 module.exports = userController;
