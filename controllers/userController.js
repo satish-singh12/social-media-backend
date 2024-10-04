@@ -29,13 +29,13 @@ const userController = {
 
   updateUser: async (req, res) => {
     try {
-      const { website, fullname, story, phone, address } = req.body;
+      const { website, fullname, story, phone, address, avatar } = req.body;
       if (!fullname) {
         return res.status(400).json({ message: "Fullname is requires" });
       }
       await Users.findOneAndUpdate(
         { _id: req.user._id },
-        { website, fullname, story, phone, address }
+        { website, fullname, story, phone, address, avatar }
       );
       return res.status(201).json({ message: "Updated successfully!" });
     } catch (err) {
