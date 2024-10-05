@@ -6,6 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoute");
 const userRouter = require("./routes/userRoute");
+const postRouter = require("./routes/postRoute");
 
 //MONGODB for database connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true }).then(
@@ -24,7 +25,7 @@ const PORT = process.env.PORT || 5000;
 // Activate CORS
 app.use(
   cors({
-    origin: "http://localhost:3000", // Update with your frontend URL
+    origin: "http://localhost:3000", // Update with frontend URL
     credentials: true,
   })
 );
@@ -35,6 +36,7 @@ app.use(cookieParser());
 
 app.use("/api", authRouter);
 app.use("/api", userRouter);
+app.use("/api", postRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT# ${PORT}`);

@@ -57,7 +57,7 @@ const authController = {
         },
       });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      return res.status(500).json({ message: err.message });
     }
   },
 
@@ -95,7 +95,7 @@ const authController = {
         },
       });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      return res.status(500).json({ message: err.message });
     }
   },
 
@@ -136,7 +136,7 @@ const authController = {
         }
       );
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      return res.status(500).json({ message: err.message });
     }
   },
 };
