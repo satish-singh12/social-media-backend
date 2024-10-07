@@ -14,12 +14,32 @@ const userController = {
     }
   },
 
+  // getUser: async (req, res) => {
+  //   try {
+  //     const user = await Users.findOne({ _id: req.params.id }).select(
+  //       "-password"
+  //     );
+  //     if (!user) return res.status(400).json({ message: "No user exists" });
+
+  //     res.json({ user });
+  //   } catch (err) {
+  //     return res.status(500).json({ message: err.message });
+  //   }
+  // },
+
   getUser: async (req, res) => {
     try {
-      const user = await Users.findOne({ _id: req.params.id }).select(
-        "-password"
-      );
-      if (!user) return res.status(400).json({ message: "No user exists" });
+      const user = await Users.findOne({ _id: req.params.id })
+        .select("-password")
+        .populate({
+          path: "friends", // Populate the 'user' field
+          // select: "fullname, username, avatar, gender", // Select only the fields you want from 'user'
+        })
+        .populate({
+          path: "following", // Populate the 'likes' field
+          // select: users, // Select only the fields you want from 'likes'
+        });
+      if (!user) return res.status(400).json({ message: "No Data Found" });
 
       res.json({ user });
     } catch (err) {
