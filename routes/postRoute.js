@@ -10,4 +10,9 @@ const auth = require("../middleware/auth");
 router.post("/posts/:id", auth, postController.createPost);
 router.get("/posts", auth, postController.getPost);
 
+router.route("/post/:id").patch(auth, postController.updatePost);
+
+router.patch("/post/:id/like", auth, postController.likePost);
+router.patch("/post/:id/unlike", auth, postController.unlikePost);
+
 module.exports = router;

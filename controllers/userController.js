@@ -32,12 +32,10 @@ const userController = {
       const user = await Users.findOne({ _id: req.params.id })
         .select("-password")
         .populate({
-          path: "friends", // Populate the 'user' field
-          // select: "fullname, username, avatar, gender", // Select only the fields you want from 'user'
+          path: "friends",
         })
         .populate({
-          path: "following", // Populate the 'likes' field
-          // select: users, // Select only the fields you want from 'likes'
+          path: "following",
         });
       if (!user) return res.status(400).json({ message: "No Data Found" });
 
