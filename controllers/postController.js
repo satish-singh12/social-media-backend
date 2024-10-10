@@ -30,6 +30,19 @@ const postController = {
         .populate({
           path: "likes", // Populate the 'likes' field
           select: "username avatar fullname", // Select only the fields you want from 'likes'
+        })
+        .populate({
+          path: "comments",
+          populate: [
+            {
+              path: "user",
+              select: "-password",
+            },
+            {
+              path: "likes",
+              select: "-password",
+            },
+          ],
         });
       // .populate("user likes", "username avatar fullname");
 

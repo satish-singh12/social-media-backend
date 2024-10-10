@@ -14,12 +14,10 @@ const auth = async (req, res, next) => {
 
     if (!decoded) return res.status(401).json({ message: "Invalid Token" });
 
-    // Find the user in the database using the decoded user ID from the token
     const user = await Users.findOne({ _id: decoded.id });
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Attach the user object to the request object, making it accessible in the next middleware or route handler
     req.user = user;
 
     next();

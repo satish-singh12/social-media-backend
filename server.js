@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoute");
 const userRouter = require("./routes/userRoute");
 const postRouter = require("./routes/postRoute");
+const commentRouter = require("./routes/commentRoute");
 
 //MONGODB for database connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true }).then(
@@ -37,6 +38,7 @@ app.use(cookieParser());
 app.use("/api", authRouter);
 app.use("/api", userRouter);
 app.use("/api", postRouter);
+app.use("/api", commentRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT# ${PORT}`);
