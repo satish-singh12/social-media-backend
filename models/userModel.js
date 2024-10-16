@@ -54,6 +54,7 @@ const UserSchema = new Schema(
     },
     friends: [{ type: mongoose.Types.ObjectId, ref: "users" }],
     following: [{ type: mongoose.Types.ObjectId, ref: "users" }],
+    saved: [{ type: mongoose.Types.ObjectId, ref: "users" }],
   },
   {
     timestamps: true,
