@@ -4,7 +4,7 @@ const Posts = require("../models/postModel");
 const commentController = {
   createComment: async (req, res) => {
     try {
-      const { content, postId, tag, reply } = req.body;
+      const { content, postId, tag, reply, postUserId } = req.body;
 
       const post = await Posts.findById(postId);
       if (!post) return res.status(400).json({ message: "No post found." });
@@ -14,6 +14,8 @@ const commentController = {
         content,
         tag,
         reply,
+        postUserId,
+        postId,
       });
       const post1 = await Posts.findOneAndUpdate(
         { _id: postId },
@@ -83,6 +85,24 @@ const commentController = {
       return res.json({
         message: "Comment unliked",
       });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  },
+  deleteComment: async (req, res) => {
+    try {
+      const comment = await Comments.findOneAndDelete({
+        _id: req.params.id,
+        $or: [{ postUserId: req.user._id }, { user: req.user._id }],
+      });
+
+      const post = await Posts.findOneAndUpdate(
+        { _id: comment.postId },
+        {
+          $pull: { comments: req.params.id },
+        }
+      );
+      return res.status(200).json({ message: "Comment deleted successfully" });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

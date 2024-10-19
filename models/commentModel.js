@@ -12,6 +12,8 @@ const CommentSchema = new Schema(
     reply: mongoose.Types.ObjectId,
     likes: [{ type: mongoose.Types.ObjectId, ref: "users" }],
     user: { type: mongoose.Types.ObjectId, ref: "users" },
+    postId: mongoose.Types.ObjectId,
+    postUserId: mongoose.Types.ObjectId,
   },
   {
     timestamps: true,

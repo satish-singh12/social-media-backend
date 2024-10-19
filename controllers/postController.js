@@ -14,7 +14,13 @@ const postController = {
         user: userId,
       });
       await newPosts.save();
-      return res.status(200).json({ message: "Post saved", newPosts });
+      return res.status(200).json({
+        message: "Post saved",
+        newPosts: {
+          ...newPosts._doc,
+          user: req.user,
+        },
+      });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -28,11 +34,11 @@ const postController = {
         .sort("-createdAt")
         .populate({
           path: "user", // Populate the 'user' field
-          select: "username avatar fullname", // Select only the fields you want from 'user'
+          select: "username avatar fullname friends", // Select only the fields you want from 'user'
         })
         .populate({
           path: "likes", // Populate the 'likes' field
-          select: "username avatar fullname", // Select only the fields you want from 'likes'
+          select: "username avatar fullname friends", // Select only the fields you want from 'likes'
         })
         .populate({
           path: "comments",
@@ -234,8 +240,8 @@ const postController = {
             },
           ],
         });
-      if (!posts || posts.length === 0)
-        return res.status(404).json({ message: "No posts found.." });
+      // if (!posts || posts.length === 0)
+      //   return res.status(404).json({ message: "No posts found.." });
 
       return res.status(200).json({
         message: "Posts found",
@@ -290,7 +296,13 @@ const postController = {
         user: req.user._id,
       });
       await Comments.deleteMany({ _id: { $in: post.comments } });
-      return res.status(500).json({ message: err.message });
+      return res.status(200).json({
+        message: "deleted successfully",
+        newPosts: {
+          ...post,
+          user: req.user,
+        },
+      });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

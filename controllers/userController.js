@@ -57,13 +57,20 @@ const userController = {
       if (user.length > 0)
         return res.status(400).json({ message: "You have already following" });
 
-      await Users.findOneAndUpdate(
+      const newUser = await Users.findOneAndUpdate(
         { _id: req.params.id },
         {
           $push: { friends: req.user._id },
         },
         { new: true }
-      );
+      )
+        .select("-password")
+        .populate({
+          path: "friends",
+        })
+        .populate({
+          path: "following",
+        });
 
       await Users.findOneAndUpdate(
         { _id: req.user._id },
@@ -73,7 +80,7 @@ const userController = {
         { new: true }
       );
 
-      res.json({ message: "friend added.." });
+      res.json({ newUser });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -81,13 +88,20 @@ const userController = {
 
   unfriend: async (req, res) => {
     try {
-      await Users.findOneAndUpdate(
-        { _id: req.params._id },
+      const newUser = await Users.findOneAndUpdate(
+        { _id: req.params.id },
         {
           $pull: { friends: req.user._id },
         },
         { new: true }
-      );
+      )
+        .select("-password")
+        .populate({
+          path: "friends",
+        })
+        .populate({
+          path: "following",
+        });
 
       await Users.findOneAndUpdate(
         { _id: req.user._id },
@@ -97,7 +111,7 @@ const userController = {
         { new: true }
       );
 
-      res.json({ message: "friend removed" });
+      res.json({ newUser });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
