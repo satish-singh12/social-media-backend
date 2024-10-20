@@ -9,5 +9,15 @@ router.delete(
   notificationController.removeNotification
 );
 router.get("/notifications", auth, notificationController.getNotification);
+router.delete(
+  "/deleteallnotification",
+  auth,
+  notificationController.deleteAllNotification
+);
+router.patch(
+  "/isreadnotification/:id",
+  auth,
+  notificationController.isReadyNotification
+);
 
 module.exports = router;

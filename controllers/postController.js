@@ -259,11 +259,11 @@ const postController = {
       const post = await Posts.findById(req.params.id)
         .populate({
           path: "user",
-          select: "username avatar fullname",
+          select: "username avatar fullname friends",
         })
         .populate({
           path: "likes",
-          select: "username avatar fullname",
+          select: "username avatar fullname friends",
         })
         .populate({
           path: "comments",

@@ -14,6 +14,7 @@ const notificationController = {
         isRead,
         user: req.user,
       });
+      if (recipients.includes(req.user._id.toString())) return;
       await notification.save();
       return res.json({ notification });
     } catch (err) {
@@ -34,20 +35,40 @@ const notificationController = {
 
   getNotification: async (req, res) => {
     try {
-      console.log("req.user", req);
       const notifications = await Notifications.find({
         recipients: req.user._id,
       })
-        .sort("-isRead")
+        .sort("createdAt")
         .populate({
           path: "user",
           select: "avatar fullname username",
         });
-      console.log(
-        "Notifications fetched: ",
-        notifications.length,
-        notifications
+      return res.json({ notifications });
+    } catch (err) {
+      return res.status(400).json({ message: err.message });
+    }
+  },
+
+  isReadyNotification: async (req, res) => {
+    try {
+      const notifications = await Notifications.findOneAndUpdate(
+        {
+          _id: req.params.id,
+        },
+        { isReady: true }
       );
+      return res.json({ notifications });
+    } catch (err) {
+      return res.status(400).json({ message: err.message });
+    }
+  },
+
+  deleteAllNotification: async (req, res) => {
+    console.log("req.user._id", req.user._id);
+    try {
+      const notifications = await Notifications.deleteMany({
+        recipients: req.user._id,
+      });
       return res.json({ notifications });
     } catch (err) {
       return res.status(400).json({ message: err.message });
