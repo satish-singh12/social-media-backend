@@ -9,6 +9,7 @@ const userRouter = require("./routes/userRoute");
 const postRouter = require("./routes/postRoute");
 const commentRouter = require("./routes/commentRoute");
 const notificationRouter = require("./routes/notificationRoute");
+const messageRouter = require("./routes/messageRoute");
 const socketServer = require("./socketServer");
 
 //MONGODB for database connection
@@ -56,6 +57,7 @@ app.use("/api", userRouter);
 app.use("/api", postRouter);
 app.use("/api", commentRouter);
 app.use("/api", notificationRouter);
+app.use("/api", messageRouter);
 
 http.listen(PORT, () => {
   console.log(`Server is running on PORT# ${PORT}`);

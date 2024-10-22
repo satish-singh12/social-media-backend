@@ -81,5 +81,11 @@ const socketServer = (socket) => {
       });
     }
   });
+
+  socket.on("addMessage", (msg) => {
+    const user = users.find((user) => user.id === msg.recipient);
+
+    user && socket.to(`${user.socketId}`).emit("addMessageToClient", msg);
+  });
 };
 module.exports = socketServer;
