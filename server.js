@@ -27,8 +27,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin:
-      "https://social-media-frontend-5l6zrd0uf-satish-singh12s-projects.vercel.app/",
+    origin: "https://social-media-frontend-vert-eight.vercel.app",
     // origin: "http://localhost:3000", // Update with frontend URL
     credentials: true,
   })
@@ -40,8 +39,7 @@ app.use(cookieParser());
 const http = require("http").createServer(app);
 const io = require("socket.io")(http, {
   cors: {
-    origin:
-      "https://social-media-frontend-5l6zrd0uf-satish-singh12s-projects.vercel.app/",
+    origin: "https://social-media-frontend-vert-eight.vercel.app/",
     // origin: "http://localhost:3000", // Replace with your frontend URL
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
     credentials: true,
