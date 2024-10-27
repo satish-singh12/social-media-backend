@@ -75,7 +75,6 @@ const notificationController = {
   },
 
   deleteAllNotification: async (req, res) => {
-    console.log("req.user._id", req.user._id);
     try {
       const notifications = await Notifications.deleteMany({
         recipients: req.user._id,

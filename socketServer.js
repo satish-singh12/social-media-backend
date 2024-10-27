@@ -78,13 +78,11 @@ const socketServer = (socket) => {
   });
 
   socket.on("addFriend", (newUser) => {
-    //console.log(newUser);
     const user = users.find((user) => user.id === newUser._id);
     user && socket.to(`${user.socketId}`).emit("addFriendToClient", newUser);
   });
 
   socket.on("unFriend", (newUser) => {
-    console.log(newUser);
     const user = users.find((user) => user.id === newUser._id);
 
     user && socket.to(`${user.socketId}`).emit("unFriendToClient", newUser);
@@ -95,7 +93,6 @@ const socketServer = (socket) => {
 
     if (clients.length > 0) {
       clients.forEach((client) => {
-        console.log("hello", client.socketId);
         socket.to(`${client.socketId}`).emit("createNotificationToClient", msg);
       });
     }
