@@ -39,7 +39,6 @@ const authController = {
       const accessToken = createAccessToken({ id: newUser.id });
       const refreshToken = createRefreshToken({ id: newUser.id });
 
-      //console.log({ accessToken, refreshToken });
       await newUser.save();
 
       res.cookie("refreshToken", refreshToken, {
@@ -81,7 +80,7 @@ const authController = {
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         path: "/api/refresh_token",
-        maxAge: 24 * 30 * 60 * 60 * 1000, // Cookie lifespan in milliseconds
+        maxAge: 24 * 30 * 60 * 60 * 1000,
         sameSite: "None",
         secure: true,
       });

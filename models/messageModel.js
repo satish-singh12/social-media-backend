@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 
 const messageSchema = new Schema(
   {
-    conversation: [{ type: mongoose.Types.ObjectId, ref: "conversation" }],
-    sender: [{ type: mongoose.Types.ObjectId, ref: "users" }],
-    recipient: [{ type: mongoose.Types.ObjectId, ref: "users" }],
+    conversation: { type: mongoose.Types.ObjectId, ref: "conversation1" },
+    sender: { type: mongoose.Types.ObjectId, ref: "users" },
+    recipient: { type: mongoose.Types.ObjectId, ref: "users" },
     text: String,
     media: Array,
   },
@@ -15,6 +15,6 @@ const messageSchema = new Schema(
   }
 );
 
-const Message = mongoose.model("message", messageSchema);
+const Message = mongoose.model("message1", messageSchema);
 
 module.exports = Message;

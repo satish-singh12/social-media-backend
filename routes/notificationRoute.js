@@ -17,7 +17,7 @@ router.delete(
 router.patch(
   "/isreadnotification/:id",
   auth,
-  notificationController.isReadyNotification
+  notificationController.isReadNotification
 );
 
 module.exports = router;

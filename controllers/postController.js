@@ -37,8 +37,8 @@ const postController = {
           select: "username avatar fullname friends", // Select only the fields you want from 'user'
         })
         .populate({
-          path: "likes", // Populate the 'likes' field
-          select: "username avatar fullname friends", // Select only the fields you want from 'likes'
+          path: "likes",
+          select: "username avatar fullname friends",
         })
         .populate({
           path: "comments",
@@ -76,12 +76,12 @@ const postController = {
         { content, images }
       )
         .populate({
-          path: "user", // Populate the 'user' field
-          select: "username avatar fullname", // Select only the fields you want from 'user'
+          path: "user",
+          select: "username avatar fullname",
         })
         .populate({
-          path: "likes", // Populate the 'likes' field
-          select: "username avatar fullname", // Select only the fields you want from 'likes'
+          path: "likes",
+          select: "username avatar fullname",
         });
 
       if (!post) return res.status(400).json({ message: "No post found." });
@@ -101,7 +101,6 @@ const postController = {
         _id: req.params.id,
         likes: req.user._id,
       });
-      // If the user already liked the post
       if (post) {
         return res.status(400).json({
           message: "You have already liked this post",
@@ -150,12 +149,12 @@ const postController = {
       })
         .sort("-createdAt")
         .populate({
-          path: "user", // Populate the 'user' field
-          select: "username avatar fullname", // Select only the fields you want from 'user'
+          path: "user",
+          select: "username avatar fullname",
         })
         .populate({
-          path: "likes", // Populate the 'likes' field
-          select: "username avatar fullname", // Select only the fields you want from 'likes'
+          path: "likes",
+          select: "username avatar fullname",
         });
 
       return res.json({ savedPosts });
@@ -169,7 +168,6 @@ const postController = {
         _id: req.user.id,
         saved: req.params._id,
       });
-      // If the user already liked the post
       if (user) {
         return res.status(400).json({
           message: "Already saved this post",
@@ -212,7 +210,6 @@ const postController = {
   getUserPost: async (req, res) => {
     try {
       const { id } = req.params;
-      // Validate if the id is a valid MongoDB ObjectId
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({ message: "Invalid user ID" });
       }
@@ -240,8 +237,6 @@ const postController = {
             },
           ],
         });
-      // if (!posts || posts.length === 0)
-      //   return res.status(404).json({ message: "No posts found.." });
 
       return res.status(200).json({
         message: "Posts found",
@@ -249,7 +244,6 @@ const postController = {
         posts,
       });
     } catch (err) {
-      console.error("Error fetching posts:", err); // Log error to server console
       return res.status(500).json({ message: err.message });
     }
   },

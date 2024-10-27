@@ -25,8 +25,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true }).then(
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-// Activate CORS
 app.use(
   cors({
     origin: "http://localhost:3000", // Update with frontend URL
@@ -36,7 +34,6 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-//app.use(express.json());
 
 const http = require("http").createServer(app);
 const io = require("socket.io")(http, {
@@ -48,7 +45,6 @@ const io = require("socket.io")(http, {
 });
 
 io.on("connection", (socket) => {
-  // console.log(socket.id + " connected"); // Add space before 'connected'
   socketServer(socket);
 });
 

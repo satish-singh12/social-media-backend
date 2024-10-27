@@ -1,116 +1,155 @@
-# Social Media Backend API
+# The Gram - Backend
 
-This is the backend code for a social media platform that allows users to register, log in, manage profiles, search for users, and interact with their data. This application is built using Node.js, Express.js, MongoDB, and JWT for authentication.
+This is the backend for **The Gram**, a modern social media application built with Node.js and Express. The backend manages user authentication, post handling, comments, notifications, and messaging with real-time capabilities via Socket.io.
+
+## Table of Contents
+- [The Gram - Backend](#the-gram---backend)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Tech Stack](#tech-stack)
+  - [Folder Structure](#folder-structure)
 
 ## Features
 
-- User registration and login
-- JWT-based authentication
-- User search functionality
-- Middleware for user authentication
-- MongoDB for database storage
-- Secure password handling using bcrypt
-- Token-based session management using access and refresh tokens
+- **User Authentication**: Register, login, logout, and JWT-based authentication.
+- **Profile Management**: Update profile info, manage followers and friends.
+- **Post Management**: Create, update, delete, and view posts, with options to like, comment, and save posts.
+- **Notifications**: Create and manage notifications.
+- **Messaging**: Real-time messaging using Socket.io.
+- **MongoDB Integration**: Mongoose used for MongoDB connections and data management.
 
-## Prerequisites
+## Tech Stack
 
-Before running this application, make sure you have the following installed:
+- **Node.js**
+- **Express**
+- **MongoDB** with Mongoose
+- **Socket.io** for real-time messaging
+- **JWT** for authentication
+- **Cors** for cross-origin resource sharing
+- **dotenv** for environment management
+- **Nodemon** for development server auto-restart
 
-- [Node.js](https://nodejs.org/)
-- [MongoDB](https://www.mongodb.com/)
-- [Git](https://git-scm.com/)
-- A `.env` file with the following environment variables:
+## Folder Structure
 
+The project structure is organized as follows:
 
-## Installation
+```plaintext
+the-gram-backend/
+├── controllers/          # Business logic for each module
+│   ├── authController.js
+│   ├── userController.js
+│   ├── postController.js
+│   ├── commentController.js
+│   ├── notificationController.js
+│   └── messageController.js
+├── middleware/           # Middleware functions
+│   └── auth.js
+├── models/               # Mongoose schemas and models
+│   ├── User.js
+│   ├── Post.js
+│   ├── Comment.js
+│   ├── Notification.js
+│   └── Message.js
+├── routes/               # API route definitions
+│   ├── authRoute.js
+│   ├── userRoute.js
+│   ├── postRoute.js
+│   ├── commentRoute.js
+│   ├── notificationRoute.js
+│   └── messageRoute.js
+├── socketServer.js       # Socket.io server logic
+├── server.js             # Main server file
+├── .env                  # Environment variables
+└── package.json
+```
 
+### Setup and Installation
 1. Clone the repository:
 
- ```bash
- git clone <repository-url>
-
+    ```bash
+    git clone https://github.com/yourusername/the-gram-backend.git
+    ```
 2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```
-npm install   
-
-3. Set up the .env file by creating a .env file in the root directory with your environment variables.
+3. Set up environment variables (see below).
 
 4. Start the server:
 
-```
-npm start
 
-The server will run on http://localhost:5000.
+    ```plaintext
+    PORT=5000
+    MONGODB_URI=your_mongodb_connection_string
+    JWT_SECRET=your_jwt_secret
+    FRONTEND_URL=http://localhost:3000
+    ```
 
-API Endpoints
+## API Endpoints
 
-Authentication Routes
+### Authentication Routes
 
-- POST /api/register - Register a new user
-- POST /api/login - Log in a user and receive an access token
-- POST /api/logout - Log out a user and clear the refresh token
-- POST /api/refresh_token - Generate a new access token using the refresh token
+| Method | Endpoint               | Description             |
+|--------|------------------------|-------------------------|
+| POST   | `/api/register`        | Register a new user     |
+| POST   | `/api/login`           | User login              |
+| POST   | `/api/logout`          | User logout             |
+| POST   | `/api/refresh_token`   | Refresh JWT token       |
 
-User Routes
+### User Routes
 
-- GET /api/search?username=<username> - Search for users by username
-- GET /api/user/:id - Get user profile by user ID
+| Method | Endpoint               | Description                       |
+|--------|------------------------|-----------------------------------|
+| GET    | `/api/search`          | Search for users                 |
+| GET    | `/api/user/:id`        | Get user details                 |
+| PATCH  | `/api/user/:id`        | Update user details              |
+| PATCH  | `/api/user/:id/friend` | Send a friend request            |
+| PATCH  | `/api/user/:id/unfriend`| Remove a friend                 |
 
-Middleware
+### Post Routes
 
-- auth.js - Middleware to verify JWT tokens and authorize users
+| Method | Endpoint               | Description                     |
+|--------|------------------------|---------------------------------|
+| POST   | `/api/posts/:id`       | Create a post                   |
+| GET    | `/api/posts`           | Get all posts                   |
+| PATCH  | `/api/post/:id`        | Update a specific post          |
+| DELETE | `/api/post/:id`        | Delete a specific post          |
+| PATCH  | `/api/post/:id/like`   | Like a post                     |
+| PATCH  | `/api/post/:id/unlike` | Unlike a post                   |
+| GET    | `/api/userposts/:id`   | Get posts of a user            |
+| PATCH  | `/api/save/:id`        | Save a post                     |
+| PATCH  | `/api/unsave/:id`      | Unsave a post                   |
+| GET    | `/api/getsavedpost`    | Get saved posts                 |
 
-Models
+### Comment Routes
 
-- userModel.js - MongoDB model defining user schema, including username, fullname, email, password, and more.
+| Method | Endpoint               | Description                        |
+|--------|------------------------|------------------------------------|
+| POST   | `/api/comment`         | Add a comment to a post           |
+| PATCH  | `/api/comment/:id`     | Update a specific comment         |
+| DELETE | `/api/comment/:id`     | Delete a specific comment         |
 
-Code Structure
+### Notification Routes
 
-├── controllers
-│   ├── authController.js        # Handles user authentication
-│   ├── userController.js        # Handles user-related logic
-├── middleware
-│   └── auth.js                  # JWT authentication middleware
-├── models
-│   └── userModel.js             # User schema for MongoDB
-├── routes
-│   ├── authRoute.js             # Routes for authentication
-│   └── userRoute.js             # Routes for user operations
-├── .env                         # Environment variables
-├── server.js                    # Main server file
+| Method | Endpoint               | Description                          |
+|--------|------------------------|--------------------------------------|
+| POST   | `/api/notification`     | Create a notification                |
+| DELETE | `/api/notification/:id` | Remove a notification                |
+| GET    | `/api/notifications`    | Get all notifications                |
+| DELETE | `/api/deleteallnotification` | Delete all notifications       |
+| PATCH  | `/api/isreadnotification/:id` | Mark notification as read      |
 
-Usage
+### Message Routes
 
-1. Register a user:
+| Method | Endpoint               | Description                          |
+|--------|------------------------|--------------------------------------|
+| POST   | `/api/message`         | Send a message                      |
+| GET    | `/api/conversations`   | Get conversations for a user        |
+| GET    | `/api/message/:id`     | Get messages in a conversation      |
+| DELETE | `/api/message/:id`     | Delete a message                    |
+| DELETE | `/api/messages/:id`    | Delete all messages in a conversation |
 
-```
-POST /api/register
-{
-  "username": "exampleuser",
-  "fullname": "Example User",
-  "email": "user@example.com",
-  "password": "password123",
-  "gender": "male"
-}
+## License
 
-2. Login a user:
-
-```
-POST /api/login
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-
-3. Search for users:
-
-```
-GET /api/search?username=<username>
-
-License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-```
-This `README.md` file provides a clear structure for understanding the project's purpose, installation steps, features, and usage examples. You can customize it further based on your specific repository details.
+This project is licensed under the MIT License.
