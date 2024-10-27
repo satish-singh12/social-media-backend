@@ -3,16 +3,34 @@ let users = [];
 const socketServer = (socket) => {
   socket.on("joinUser", (id) => {
     users.push({ id, socketId: socket.id });
-    console.log({ users });
-    // Emit the updated online users list
-    socket.broadcast.emit(
-      "getOnlineUsers",
-      users.map((user) => user.id)
-    );
-  });
 
-  socket.on("disconnect", () => {
-    users = users.filter((user) => user.socketId !== socket.id);
+    //   console.log({ users });
+    //   // Emit the updated online users list
+    //   socket.broadcast.emit(
+    //     "getOnlineUsers",
+    //     users.map((user) => user.id)
+    //   );
+    // });
+
+    // socket.on("disconnect", () => {
+    //   users = users.filter((user) => user.socketId !== socket.id);
+    //   console.log({ users });
+    //   socket.broadcast.emit(
+    //     "getOnlineUsers",
+    //     users.map((user) => user.id)
+    //   );
+    // });
+
+    const existingUserIndex = users.findIndex((user) => user.id === id);
+
+    if (existingUserIndex !== -1) {
+      // Update socketId if the user already exists
+      users[existingUserIndex].socketId = socket.id;
+    } else {
+      // Add new user if not already present
+      users.push({ id, socketId: socket.id });
+    }
+
     console.log({ users });
     socket.broadcast.emit(
       "getOnlineUsers",
@@ -74,8 +92,10 @@ const socketServer = (socket) => {
 
   socket.on("createNotification", (msg) => {
     const clients = users.filter((user) => msg.recipients.includes(user.id));
+
     if (clients.length > 0) {
       clients.forEach((client) => {
+        console.log("hello", client.socketId);
         socket.to(`${client.socketId}`).emit("createNotificationToClient", msg);
       });
     }
