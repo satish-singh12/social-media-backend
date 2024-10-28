@@ -112,6 +112,7 @@ const userController = {
 
   unfriend: async (req, res) => {
     try {
+      // Remove current user from the target user's friends list
       const newUser = await Users.findOneAndUpdate(
         { _id: req.params.id },
         {
@@ -127,10 +128,11 @@ const userController = {
           path: "following",
         });
 
+      // Remove target user from the current user's following list
       await Users.findOneAndUpdate(
         { _id: req.user._id },
         {
-          $pull: { following: req.params._id },
+          $pull: { following: req.params.id },
         },
         { new: true }
       );

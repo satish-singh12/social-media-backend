@@ -4,23 +4,6 @@ const socketServer = (socket) => {
   socket.on("joinUser", (id) => {
     users.push({ id, socketId: socket.id });
 
-    //   console.log({ users });
-    //   // Emit the updated online users list
-    //   socket.broadcast.emit(
-    //     "getOnlineUsers",
-    //     users.map((user) => user.id)
-    //   );
-    // });
-
-    // socket.on("disconnect", () => {
-    //   users = users.filter((user) => user.socketId !== socket.id);
-    //   console.log({ users });
-    //   socket.broadcast.emit(
-    //     "getOnlineUsers",
-    //     users.map((user) => user.id)
-    //   );
-    // });
-
     const existingUserIndex = users.findIndex((user) => user.id === id);
 
     if (existingUserIndex !== -1) {
@@ -39,7 +22,12 @@ const socketServer = (socket) => {
   });
 
   socket.on("likePost", (newPost) => {
-    const ids = [...newPost.user.friends, newPost.user._id];
+    // Use an empty array as a fallback if friends is undefined or not an array
+    const friends = Array.isArray(newPost.user.friends)
+      ? newPost.user.friends
+      : [];
+    const ids = [...friends, newPost.user._id];
+
     const clients = users.filter((user) => ids.includes(user.id));
     if (clients.length > 0) {
       clients.forEach((client) => {
@@ -47,6 +35,7 @@ const socketServer = (socket) => {
       });
     }
   });
+
   socket.on("unlikePost", (newPost) => {
     const ids = [...newPost.user.friends, newPost.user._id];
     const clients = users.filter((user) => ids.includes(user.id));

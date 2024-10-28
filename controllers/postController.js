@@ -8,6 +8,13 @@ const postController = {
     try {
       const userId = req.params.id;
       const { content, images } = req.body;
+
+      if (!content && (!images || images.length === 0)) {
+        return res
+          .status(400)
+          .json({ message: "Please provide content or an image." });
+      }
+
       const newPosts = new Posts({
         content,
         images,
@@ -67,13 +74,45 @@ const postController = {
     }
   },
 
+  // updatePost: async (req, res) => {
+  //   try {
+  //     const { content, images } = req.body;
+
+  //     const post = await Posts.findOneAndUpdate(
+  //       { _id: req.params.id },
+  //       { content, images }
+  //     )
+  //       .populate({
+  //         path: "user",
+  //         select: "username avatar fullname",
+  //       })
+  //       .populate({
+  //         path: "likes",
+  //         select: "username avatar fullname",
+  //       });
+
+  //     if (!post) return res.status(400).json({ message: "No post found." });
+
+  //     return res.status(200).json({
+  //       message: "Post updated",
+  //       newPost: { ...post._doc, content, images },
+  //     });
+  //   } catch (err) {
+  //     return res.status(500).json({ message: err.message });
+  //   }
+  // },
   updatePost: async (req, res) => {
     try {
       const { content, images } = req.body;
+      const updateFields = {};
+
+      if (content) updateFields.content = content;
+      if (images) updateFields.images = images;
 
       const post = await Posts.findOneAndUpdate(
         { _id: req.params.id },
-        { content, images }
+        updateFields,
+        { new: true }
       )
         .populate({
           path: "user",
@@ -88,7 +127,7 @@ const postController = {
 
       return res.status(200).json({
         message: "Post updated",
-        newPost: { ...post._doc, content, images },
+        newPost: { ...post._doc },
       });
     } catch (err) {
       return res.status(500).json({ message: err.message });
