@@ -74,33 +74,6 @@ const postController = {
     }
   },
 
-  // updatePost: async (req, res) => {
-  //   try {
-  //     const { content, images } = req.body;
-
-  //     const post = await Posts.findOneAndUpdate(
-  //       { _id: req.params.id },
-  //       { content, images }
-  //     )
-  //       .populate({
-  //         path: "user",
-  //         select: "username avatar fullname",
-  //       })
-  //       .populate({
-  //         path: "likes",
-  //         select: "username avatar fullname",
-  //       });
-
-  //     if (!post) return res.status(400).json({ message: "No post found." });
-
-  //     return res.status(200).json({
-  //       message: "Post updated",
-  //       newPost: { ...post._doc, content, images },
-  //     });
-  //   } catch (err) {
-  //     return res.status(500).json({ message: err.message });
-  //   }
-  // },
   updatePost: async (req, res) => {
     try {
       const { content, images } = req.body;

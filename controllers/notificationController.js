@@ -58,19 +58,19 @@ const notificationController = {
           .json({ message: "Notification ID is required." });
       }
 
-      const notifications = await Notifications.findOneAndUpdate(
+      const notification = await Notifications.findOneAndUpdate(
         { _id: req.params.id },
         { isRead: true },
-        { new: true } // This will return the updated document
+        { new: true, fields: { _id: 1, isRead: 1 } } // Return only necessary fields
       );
 
-      if (!notifications) {
+      if (!notification) {
         return res.status(404).json({ message: "Notification not found." });
       }
 
-      return res.json({ notifications });
+      return res.json({ notification });
     } catch (err) {
-      return res.status(400).json({ message: err.message });
+      return res.status(500).json({ message: "Server error: " + err.message });
     }
   },
 

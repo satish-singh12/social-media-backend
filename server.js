@@ -12,15 +12,16 @@ const notificationRouter = require("./routes/notificationRoute");
 const messageRouter = require("./routes/messageRoute");
 const socketServer = require("./socketServer");
 
-//MONGODB for database connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true }).then(
-  () => {
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
     console.log("Connected to DB...");
-  },
-  (err) => {
-    console.log("Something went wrong...!!" + err);
+  } catch (err) {
+    console.error("Failed to connect to DB:", err);
   }
-);
+};
+
+connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -37,15 +38,6 @@ app.use(
   })
 );
 
-// app.use(
-//   cors({
-//     origin:
-//       // "https://social-media-frontend-kuzxbfq19-satish-singh12s-projects.vercel.app",
-//       "https://social-media-frontend-vert-eight.vercel.app",
-//     // origin: "http://localhost:3000", // Update with frontend URL
-//     credentials: true,
-//   })
-// );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -54,9 +46,6 @@ const http = require("http").createServer(app);
 const io = require("socket.io")(http, {
   cors: {
     origin: allowedOrigins,
-    // "https://social-media-frontend-kuzxbfq19-satish-singh12s-projects.vercel.app",
-    // "https://social-media-frontend-vert-eight.vercel.app",
-    // origin: "http://localhost:3000", // Replace with your frontend URL
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
     credentials: true,
   },
