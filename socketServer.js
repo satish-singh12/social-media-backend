@@ -122,6 +122,11 @@ const socketServer = (socket) => {
     user?.socketId &&
       socket.to(user.socketId).emit("deleteAllMessagesToClient", id);
   });
+
+  socket.on("getMessage", (msg) => {
+    const user = users.find((user) => user.id === msg.recipient);
+    user?.socketId && socket.to(user.socketId).emit("getMessageToClient", msg);
+  });
 };
 
 module.exports = socketServer;
