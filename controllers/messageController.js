@@ -93,12 +93,30 @@ const messageController = {
   },
 
   deleteMessages: async (req, res) => {
-    try {
-      const messages = await Messages.findOneAndDelete({
-        _id: req.params.id,
-        sender: req.user._id,
+    const { id } = req.params;
+    const userId = req.user ? req.user._id : null;
+
+    console.log(id, userId);
+
+    if (!id || !userId) {
+      return res.status(400).json({
+        message: "Invalid request: Message ID and user ID are required.",
       });
-      return res.status(201).json({ message: "Deleted..!" });
+    }
+
+    try {
+      const message = await Messages.findOneAndDelete({
+        _id: id,
+        sender: userId,
+      });
+
+      if (!message) {
+        return res.status(404).json({
+          message: "Message not found or you're not authorized to delete it.",
+        });
+      }
+
+      return res.status(200).json({ message: "Deleted!" });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
