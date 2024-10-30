@@ -8,6 +8,15 @@ This is the backend for **The Gram**, a modern social media application built wi
   - [Features](#features)
   - [Tech Stack](#tech-stack)
   - [Folder Structure](#folder-structure)
+    - [Setup and Installation](#setup-and-installation)
+  - [API Endpoints](#api-endpoints)
+    - [Authentication Routes](#authentication-routes)
+    - [User Routes](#user-routes)
+    - [Post Routes](#post-routes)
+    - [Comment Routes](#comment-routes)
+    - [Notification Routes](#notification-routes)
+    - [Message Routes](#message-routes)
+  - [License](#license)
 
 ## Features
 
@@ -35,32 +44,38 @@ The project structure is organized as follows:
 
 ```plaintext
 the-gram-backend/
-├── controllers/          # Business logic for each module
-│   ├── authController.js
-│   ├── userController.js
-│   ├── postController.js
-│   ├── commentController.js
-│   ├── notificationController.js
-│   └── messageController.js
-├── middleware/           # Middleware functions
-│   └── auth.js
-├── models/               # Mongoose schemas and models
-│   ├── User.js
-│   ├── Post.js
-│   ├── Comment.js
-│   ├── Notification.js
-│   └── Message.js
-├── routes/               # API route definitions
-│   ├── authRoute.js
-│   ├── userRoute.js
-│   ├── postRoute.js
-│   ├── commentRoute.js
-│   ├── notificationRoute.js
-│   └── messageRoute.js
-├── socketServer.js       # Socket.io server logic
-├── server.js             # Main server file
-├── .env                  # Environment variables
-└── package.json
+├── controllers/          # Contains business logic for each module, defining how requests are handled
+│   ├── authController.js           # Handles authentication-related functions (e.g., login, register)
+│   ├── userController.js           # Manages user-related actions (e.g., profile updates, fetching user data)
+│   ├── postController.js           # Handles posts functionality (e.g., create, update, delete posts)
+│   ├── commentController.js        # Manages actions on comments (e.g., add, delete comments)
+│   ├── notificationController.js   # Handles notifications (e.g., create, update, mark as read)
+│   └── messageController.js        # Manages messaging functionalities (e.g., send, delete messages)
+│
+├── middleware/           # Holds middleware functions that process requests before they reach controllers
+│   └── auth.js                    # Authentication middleware to verify user tokens and protect routes
+│
+├── models/               # Defines Mongoose schemas and models for database structure
+│   ├── User.js                     # User schema, defining fields and data structure for users
+│   ├── Post.js                     # Post schema, defining fields for each post
+│   ├── Comment.js                  # Comment schema for storing comments on posts
+│   ├── Notification.js             # Notification schema to store notifications for users
+│   └── Message.js                  # Message schema for storing chat messages between users
+│
+├── routes/               # Manages API route definitions, linking endpoints to respective controllers
+│   ├── authRoute.js                # Authentication routes (e.g., login, signup)
+│   ├── userRoute.js                # User-related routes (e.g., profile updates)
+│   ├── postRoute.js                # Post-related routes (e.g., create, delete posts)
+│   ├── commentRoute.js             # Comment-related routes (e.g., add, delete comments)
+│   ├── notificationRoute.js        # Notification routes (e.g., mark as read)
+│   └── messageRoute.js             # Message routes for real-time or direct messages
+│
+├── socketServer.js       # Contains Socket.io server logic to manage real-time events like messaging
+├── app.js                # Initializes and configures the Express app, sets up middleware, and routes
+├── db.js                 # Configures the database connection to MongoDB using Mongoose
+├── server.js             # Entry point to start the server, initializes the app and connects to the database
+├── .env                  # Environment variables (e.g., database URI, secret keys)
+└── package.json          # Lists dependencies and scripts for the project
 ```
 
 ### Setup and Installation
