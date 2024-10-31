@@ -5,6 +5,8 @@ const { app } = require("../app");
 const Users = require("../models/userModel");
 
 describe("AuthController", () => {
+  let createdUserIds = []; // Array to store created user IDs
+
   beforeAll(async () => {
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
@@ -14,7 +16,8 @@ describe("AuthController", () => {
 
   // Clean up test data after each test
   afterEach(async () => {
-    await Users.deleteMany();
+    await Users.deleteMany({ _id: { $in: createdUserIds } });
+    createdUserIds = []; // Reset for the next test
   });
 
   // Disconnect from the test database after all tests are done
@@ -37,17 +40,23 @@ describe("AuthController", () => {
       expect(res.body).toHaveProperty("accessToken");
       expect(res.body.user).toHaveProperty("username", "testuser");
       expect(res.body.user).toHaveProperty("email", "testuser@example.com");
+
+      // Store the ID of the created user for cleanup
+      createdUserIds.push(res.body.user._id);
     });
 
     it("should return 400 if email already exists", async () => {
       // Create an existing user
-      await Users.create({
+      const existingUser = await Users.create({
         username: "existinguser",
         fullname: "Existing User",
         email: "existing@example.com",
         password: await bcrypt.hash("password123", 10),
         gender: "female",
       });
+
+      // Store the existing user's ID for cleanup
+      createdUserIds.push(existingUser._id);
 
       const res = await request(app).post("/api/register").send({
         username: "newuser",
@@ -69,13 +78,15 @@ describe("AuthController", () => {
     beforeEach(async () => {
       // Register a user before testing login
       const hashedPassword = await bcrypt.hash("password123", 10);
-      await Users.create({
+      const newUser = await Users.create({
         username: "testuser",
         fullname: "Test User",
         email: "testuser@example.com",
         password: hashedPassword,
         gender: "male",
       });
+      // Store the ID for cleanup
+      createdUserIds.push(newUser._id);
     });
 
     it("should login an existing user", async () => {
