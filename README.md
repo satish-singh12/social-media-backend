@@ -16,6 +16,9 @@ This is the backend for **The Gram**, a modern social media application built wi
     - [Comment Routes](#comment-routes)
     - [Notification Routes](#notification-routes)
     - [Message Routes](#message-routes)
+  - [Available Scripts](#available-scripts)
+    - [`npm start`](#npm-start)
+    - [`npm test`](#npm-test)
   - [License](#license)
 
 ## Features
@@ -164,6 +167,21 @@ the-gram-backend/
 | GET    | `/api/message/:id`     | Get messages in a conversation      |
 | DELETE | `/api/message/:id`     | Delete a message                    |
 | DELETE | `/api/messages/:id`    | Delete all messages in a conversation |
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:5000](http://localhost:5000).
+
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
+
+### `npm test`
+
 
 ## License
 
